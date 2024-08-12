@@ -1,0 +1,24 @@
+# apache.yml
+- name: Configure Apache Server
+  hosts: webservers
+  become: yes
+  tasks:
+    - name: Install Apache
+      apt:
+        name: apache2
+        state: present
+        update_cache: yes
+
+    - name: Ensure Apache is running
+      service:
+        name: apache2
+        state: started
+        enabled: yes
+
+    - name: Copy HTML files to Apache web directory
+      copy:
+        src: /vagrant/html/
+        dest: /var/www/html/
+        owner: www-data
+        group: www-data
+        mode: '0644'
